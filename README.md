@@ -84,6 +84,7 @@ This is a prototype / proof of concept and is not perfect.  So the solution does
 - Proper integration tests
 - More code comments throughout the solution
 - Better docs
+- Code structure, DRY, SOLID ++ on every part of the code. But you see the pattern. It just takes a refactoring or two to get it in proper shape.
 - A good authentication solution to sync sessions and handle access rights
 - Continues deployment and build
 - ++
