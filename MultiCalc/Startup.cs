@@ -43,7 +43,8 @@ namespace MultiCalc
             builder.RegisterHubs(Assembly.GetExecutingAssembly()).SingleInstance();
             builder.RegisterModule<AutofacWebTypesModule>();
 
-            builder.RegisterType<QueueService>().As<IQueueService>().SingleInstance();
+            builder.RegisterType<AzureServiceBusQueueService>().As<IQueueService>().SingleInstance();
+            builder.RegisterType<AzureTableStoreService>().As<ISimpleStoreService>().SingleInstance();
 
             // ... other registrations
             var container = builder.Build();

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MultiCalc.Functions
 {
-    public class QueueService : IQueueService, IDisposable
+    public class AzureServiceBusQueueService : IQueueService, IDisposable
     {
         private QueueClient _queueClient;
         private string QueueName = "calculations";

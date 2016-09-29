@@ -13,14 +13,15 @@ namespace MultiCalc.AzureWebJob
 {
     public class Functions
     {
-        private static QueueService _queueService;
+        private static AzureServiceBusQueueService _azureServiceBusQueueService;
         public static bool RunLoop { get; set; } = true;
 
         // Function triggered by a one time loop schedule every 10 sec. Should be refactored in most scenarios to use QueueTrigger.
         [NoAutomaticTriggerAttribute]
         public static async Task ProcessMethod(TextWriter log)
         {
-            _queueService = new QueueService();
+            _azureServiceBusQueueService = new AzureServiceBusQueueService();
+
 
             var hubConnection = new HubConnection("https://multicalcweb.azurewebsites.net/signalr", useDefaultUrl: false);
             var multiCalcProxy = hubConnection.CreateHubProxy("MultiCalcHub");
@@ -44,7 +45,7 @@ namespace MultiCalc.AzureWebJob
 
                 try
                 {
-                    message = await _queueService.RecieveNextMessageAsync();
+                    message = await _azureServiceBusQueueService.RecieveNextMessageAsync();
                     var calcProcessMessage = JsonConvert.DeserializeObject<CalculateProcessMessage>(message.GetBody<string>());
 
                     if (calcProcessMessage == null)
@@ -63,15 +64,14 @@ namespace MultiCalc.AzureWebJob
                         try
                         {
                             await multiCalcProxy.Invoke("LastProcessedMessage", JsonConvert.SerializeObject(calcProcessMessage));
+                            await message.CompleteAsync();
+                            log.Write("Message set to complete.");
                         }
                         catch (Exception ex)
                         {
                             log.Write($"Something went wrong communicating with SignalR. {ex.Message}");
                             await message.AbandonAsync();
                         }
-
-                        await message.CompleteAsync();
-                        log.Write("Message set to complete.");
                     }
                 }
                 catch (Exception ex)

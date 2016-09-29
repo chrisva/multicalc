@@ -8,8 +8,7 @@ namespace MultiCalc.Models
 {
     public class Client
     {
-        public string ClientId { get; set; }
-        public ClientConnectionType ClientConnectionType { get; set; }
+
     }
 
     public enum ClientConnectionType

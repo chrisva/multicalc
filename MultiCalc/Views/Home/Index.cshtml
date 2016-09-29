@@ -1,9 +1,32 @@
 ﻿@{
     ViewBag.Title = "MultiCalc";
 }
-<h2>Calculations</h2>
-<h4>Application that can be given a number and can find the sum of particular multiples.</h4>
 <div class="container">
+    <div class="row">
+        <div class="col-mg-12">
+            <h2>Calculations</h2>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Your current session id is: <span id="clientId"></span></h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="previousClientId">Restore data from previous session: </label>
+                            <input type="text" id="previousClientId" placeholder="Paste your session id here" class="form-control" />
+                            <input type="button" id="restoreSession" class="btn btn-default" value="Restore data" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-mg-12">
+            <p>Application that can be given a number and can find the sum of particular multiples.</p>
+        </div>
+    </div>
     <div class="row extra-bottom-padding">
         <div class="col-md-12">
             <form class="form-inline">
@@ -12,7 +35,7 @@
                     <input type="text" id="factors" placeholder="3,5" class="form-control" />
                     <label for="particularNumberMax">Particular number max: </label>
                     <input type="text" id="particularNumberMax" placeholder="10" class="form-control" />
-                    <input type="button" id="sendmessage" class="btn btn-default" value="Send" />
+                    <input type="button" id="sendmessage" class="btn btn-default" value="Send calculation to multicalc engine" />
                 </div>
             </form>
         </div>
@@ -65,28 +88,31 @@
             // Create a function that the hub can call back to display messages.
             multiCalcHub.client.notifyMyMultiCalcJobs = function (message) {
                 var json = $.parseJSON(message);
-                // Add the message to the page.
                 $('#myMultiCalcJobs').prepend('<li class="list-group-item"><div>Time: ' + htmlEncode(json.TimeOfRequest) + '</div><div>Factors: ' + htmlEncode(json.CalcModel.Factors) + '</div><div>ParticularNumberMax:' + htmlEncode(json.CalcModel.ParticularNumberMax) + '</div><div><a data-toggle="collapse" href="#collapse' + htmlEncode(json.RequestId) + '" aria-expanded="false" aria-controls="collapse' + htmlEncode(json.RequestId) + '">- Show raw data</a><div><div class="collapse" id="collapse' + htmlEncode(json.RequestId) + '"><div class="well" style="word-wrap:break-word;">' + message + '</div></div></li>');
-
             };
             multiCalcHub.client.notifyMyMultiCalcCompleted = function (message) {
                 var json = $.parseJSON(message);
-                // Add the message to the page.
                 $('#myMultiCalcCompleted').prepend('<li class="list-group-item"><div>Time: ' + htmlEncode(json.TimeOfRequest) + '</div><div>Factors: ' + htmlEncode(json.CalcModel.Factors) + '</div><div>ParticularNumberMax:' + htmlEncode(json.CalcModel.ParticularNumberMax) + '</div><div>SumOfMultiples:' + htmlEncode(json.SumOfMultiples) + '</div><div><a data-toggle="collapse" href="#collapse2' + htmlEncode(json.RequestId) + '" aria-expanded="false" aria-controls="collapse2' + htmlEncode(json.RequestId) + '">- Show raw data</a><div><div class="collapse" id="collapse2' + htmlEncode(json.RequestId) + '"><div class="well" style="word-wrap:break-word;">' + message + '</div></div></li>');
             };
             multiCalcHub.client.notifyAllMessage = function (message) {
                 var json = $.parseJSON(message);
-                // Add the message to the page.
                 $('#allMultiCalcJobsStatus').prepend('<li class="list-group-item"><div>Time: ' + htmlEncode(json.TimeOfRequest) + '</div><div>Factors: ' + htmlEncode(json.CalcModel.Factors) + '</div><div>ParticularNumberMax:' + htmlEncode(json.CalcModel.ParticularNumberMax) + '</div><div>SumOfMultiples:' + htmlEncode(json.SumOfMultiples) + '</div><div><a data-toggle="collapse" href="#collapse3' + htmlEncode(json.RequestId) + '" aria-expanded="false" aria-controls="collapse3' + htmlEncode(json.RequestId) + '">- Show raw data</a><div><div class="collapse" id="collapse3' + htmlEncode(json.RequestId) + '"><div class="well" style="word-wrap:break-word;">' + message + '</div></div></li>');
+            };
+            multiCalcHub.client.initComplete = function (currentId) {
+                $('#clientId').text(currentId);
             };
             // Start the connection.
             $.connection.hub.start().done(function () {
+                multiCalcHub.server.initConnection('');
                 $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
                     multiCalcHub.server.addMultiCalcToQueue($('#factors').val(), $('#particularNumberMax').val());
+                });
+                $('#restoreSession').click(function () {
+                    // Call the Send method on the hub.
+                    multiCalcHub.server.restoreSession($('#previousClientId').val());
                     // Clear text box and reset focus for next comment.
-                    $('#factors').val('').focus();
-                    $('#particularNumberMax').val('').focus();
+                    $('#previousClientId').val('').focus();
                 });
             });
         });
