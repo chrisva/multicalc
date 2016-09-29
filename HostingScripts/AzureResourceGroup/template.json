@@ -1,0 +1,264 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "components_multicalc_name": {
+            "defaultValue": "multicalc",
+            "type": "String"
+        },
+        "components_multicalcweb_name": {
+            "defaultValue": "multicalcweb",
+            "type": "String"
+        },
+        "namespaces_multicalc_name": {
+            "defaultValue": "multicalc",
+            "type": "String"
+        },
+        "storageAccounts_function5adca5578b6c_name": {
+            "defaultValue": "function5adca5578b6c",
+            "type": "String"
+        },
+        "storageAccounts_multicalc_name": {
+            "defaultValue": "multicalc",
+            "type": "String"
+        },
+        "sites_multicalcworker_name": {
+            "defaultValue": "multicalcworker",
+            "type": "String"
+        },
+        "sites_multicalcweb_name": {
+            "defaultValue": "multicalcweb",
+            "type": "String"
+        },
+        "AuthorizationRules_RootManageSharedAccessKey_name": {
+            "defaultValue": "multicalc/RootManageSharedAccessKey",
+            "type": "String"
+        },
+        "queues_calculations_name": {
+            "defaultValue": "multicalc/calculations",
+            "type": "String"
+        },
+        "sites_multicalcworker_serverFarmId": {
+            "defaultValue": "/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/Default-Web-WestEurope/providers/Microsoft.Web/serverfarms/Default1",
+            "type": "String"
+        },
+        "sites_multicalcweb_serverFarmId": {
+            "defaultValue": "/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/Default-Web-WestEurope/providers/Microsoft.Web/serverfarms/Default1",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/microsoft.insights/components/multicalc'.",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('components_multicalc_name')]",
+            "apiVersion": "2014-04-01",
+            "location": "Central US",
+            "tags": {
+                "hidden-link:/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/Microsoft.Web/sites/multicalcweb": "Resource"
+            },
+            "properties": {
+                "ApplicationId": "[parameters('components_multicalc_name')]"
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/microsoft.insights/components/multicalcweb'.",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('components_multicalcweb_name')]",
+            "apiVersion": "2014-04-01",
+            "location": "Central US",
+            "tags": {},
+            "properties": {
+                "ApplicationId": "[parameters('components_multicalcweb_name')]"
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourcegroups/multicalc/providers/Microsoft.ServiceBus/namespaces/multicalc'.",
+            "type": "Microsoft.ServiceBus/namespaces",
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic"
+            },
+            "kind": "Messaging",
+            "name": "[parameters('namespaces_multicalc_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "West Europe",
+            "tags": {},
+            "properties": {
+                "provisioningState": "Succeeded",
+                "status": "Active",
+                "createdAt": "2016-09-23T13:43:25.813Z",
+                "serviceBusEndpoint": "[concat('https://', parameters('namespaces_multicalc_name'),'.servicebus.windows.net:443/')]",
+                "enabled": true,
+                "updatedAt": "2016-09-23T13:43:47.857Z"
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/Microsoft.Storage/storageAccounts/function5adca5578b6c'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_function5adca5578b6c_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "westeurope",
+            "tags": {},
+            "properties": {},
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/Microsoft.Storage/storageAccounts/multicalc'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_multicalc_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "westeurope",
+            "tags": {},
+            "properties": {},
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/Microsoft.Web/sites/multicalcworker'.",
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('sites_multicalcworker_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "West Europe",
+            "tags": {
+                "hidden-related:/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourcegroups/Default-Web-WestEurope/providers/Microsoft.Web/serverfarms/Default1": "empty"
+            },
+            "properties": {
+                "name": "[parameters('sites_multicalcworker_name')]",
+                "hostNames": [
+                    "multicalcworker.azurewebsites.net"
+                ],
+                "enabledHostNames": [
+                    "multicalcworker.azurewebsites.net",
+                    "multicalcworker.scm.azurewebsites.net"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_multicalcworker_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('sites_multicalcworker_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[parameters('sites_multicalcworker_serverFarmId')]"
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/Microsoft.Web/sites/multicalcweb'.",
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('sites_multicalcweb_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "West Europe",
+            "tags": {
+                "hidden-related:/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourcegroups/Default-Web-WestEurope/providers/Microsoft.Web/serverfarms/Default1": "empty"
+            },
+            "properties": {
+                "name": "[parameters('sites_multicalcweb_name')]",
+                "hostNames": [
+                    "multicalcweb.azurewebsites.net"
+                ],
+                "enabledHostNames": [
+                    "multicalcweb.azurewebsites.net",
+                    "multicalcweb.scm.azurewebsites.net"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_multicalcweb_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('sites_multicalcweb_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[parameters('sites_multicalcweb_serverFarmId')]"
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourcegroups/multicalc/providers/Microsoft.ServiceBus/namespaces/multicalc/AuthorizationRules/RootManageSharedAccessKey'.",
+            "type": "Microsoft.ServiceBus/namespaces/AuthorizationRules",
+            "name": "[parameters('AuthorizationRules_RootManageSharedAccessKey_name')]",
+            "apiVersion": "2015-08-01",
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_multicalc_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourcegroups/multicalc/providers/Microsoft.ServiceBus/namespaces/multicalc/queues/calculations'.",
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "name": "[parameters('queues_calculations_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "West Europe",
+            "properties": {
+                "maxSizeInMegabytes": 16384,
+                "requiresDuplicateDetection": false,
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "14.00:00:00",
+                "deadLetteringOnMessageExpiration": true,
+                "enableBatchedOperations": true,
+                "isAnonymousAccessible": false,
+                "status": "Active",
+                "createdAt": "2016-09-23T14:44:44.2465597Z",
+                "updatedAt": "2016-09-23T14:44:46.27Z",
+                "accessedAt": "2016-09-29T00:48:34.3026608Z",
+                "supportOrdering": false,
+                "countDetails": {
+                    "activeMessageCount": 0,
+                    "deadLetterMessageCount": 7,
+                    "scheduledMessageCount": 0,
+                    "transferMessageCount": 0,
+                    "transferDeadLetterMessageCount": 0
+                },
+                "autoDeleteOnIdle": "10675199.02:48:05.4775807",
+                "enablePartitioning": true,
+                "enableExpress": false
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_multicalc_name'))]"
+            ]
+        }
+    ]
+}

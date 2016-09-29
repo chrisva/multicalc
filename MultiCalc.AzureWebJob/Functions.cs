@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Azure.WebJobs;
 using Microsoft.ServiceBus.Messaging;
 using MultiCalc.Functions;
@@ -16,39 +13,90 @@ namespace MultiCalc.AzureWebJob
 {
     public class Functions
     {
-        // This function will get triggered/executed when a new message is written 
-        // on an Azure Queue called queue. Would usually use this to trigger the queue.
-        /*   public static void ProcessQueueMessage([QueueTrigger("queue")] string message, TextWriter log)
-           {
-           }*/
+        private static QueueService _queueService;
+        public static bool RunLoop { get; set; } = true;
 
-        // Function triggered by a timespan schedule every 10 sec.
-        public static async Task TimerJob([TimerTrigger("00:00:10")] TimerInfo timerInfo, TextWriter log)
+        // Function triggered by a one time loop schedule every 10 sec. Should be refactored in most scenarios to use QueueTrigger.
+        [NoAutomaticTriggerAttribute]
+        public static async Task ProcessMethod(TextWriter log)
         {
-            log.WriteLine("Scheduled job fired!");
-            await GetNextMessage(log);
-        }
+            _queueService = new QueueService();
 
-        private static async Task GetNextMessage(TextWriter log)
-        {
-            var client =  new HttpClient();
-            var message = await client.GetStringAsync("http://multicalcweb.azurewebsites.net/api/SumOfMultiplies/NextSampleMessage");
+            var hubConnection = new HubConnection("https://multicalcweb.azurewebsites.net/signalr", useDefaultUrl: false);
+            var multiCalcProxy = hubConnection.CreateHubProxy("MultiCalcHub");
+            await hubConnection.Start();
 
-            log.WriteLine("Processing: " + message);
+            while (RunLoop)
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
 
-            var calcProcessMessage = JsonConvert.DeserializeObject<CalculateProcessMessage>(message);
+                log.WriteLine("Scheduled job fired!");
 
-            calcProcessMessage.Status = CalcStatus.Processing;
-            calcProcessMessage.SumOfMultiples = SumOfMultiples.To(calcProcessMessage.CalcModel.Factors, calcProcessMessage.CalcModel.ParticularNumberMax);
-            calcProcessMessage.Status = CalcStatus.Successfull;
+                var cancellationToken = new WebJobsShutdownWatcher().Token;
+                cancellationToken.Register(() =>
+                {
+                    log.Write($"Cancel: The job is stopped because it was cancelled.");
+                    RunLoop = false;
+                });
 
-            log.WriteLine("Result: " + calcProcessMessage.SumOfMultiples);
+                BrokeredMessage message = null;
 
-            var notifyResult = await client.PostAsync("http://multicalcweb.azurewebsites.net/api/SumOfMultiplies/NotifyResult", new StringContent(JsonConvert.SerializeObject(calcProcessMessage)));
+                try
+                {
+                    message = await _queueService.RecieveNextMessageAsync();
+                    var calcProcessMessage = JsonConvert.DeserializeObject<CalculateProcessMessage>(message.GetBody<string>());
 
-            var testString = await notifyResult.Content.ReadAsStringAsync();
+                    if (calcProcessMessage == null)
+                    {
+                        log.WriteLine("No message in queue. Waiting for next trigger.");
+                    }
+                    else
+                    {
+                        log.WriteLine($"Message: { JsonConvert.SerializeObject(calcProcessMessage)}");
+                        calcProcessMessage.Status = CalcStatus.Processing;
 
-            log.WriteLine(testString);
+                        //Doing the actual calculation
+                        calcProcessMessage.SumOfMultiples = SumOfMultiples.To(calcProcessMessage.CalcModel.Factors, calcProcessMessage.CalcModel.ParticularNumberMax);
+                        calcProcessMessage.Status = CalcStatus.Successfull;
+
+                        try
+                        {
+                            await multiCalcProxy.Invoke("LastProcessedMessage", JsonConvert.SerializeObject(calcProcessMessage));
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Write($"Something went wrong communicating with SignalR. {ex.Message}");
+                            await message.AbandonAsync();
+                        }
+
+                        await message.CompleteAsync();
+                        log.Write("Message set to complete.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLine($"Something went wrong processing the next message from queue. Message: {ex.Message}. StackTrace: {ex.StackTrace}");
+                    if(message != null)
+                        await message.AbandonAsync();
+                }
+
+                stopwatch.Stop();
+                
+                //Adjust time left in 10 second window.
+                var jobInterval = TimeSpan.FromSeconds(10);
+                var restTime = jobInterval.Subtract(stopwatch.Elapsed);
+                if (restTime.TotalMilliseconds > 0)
+                {
+                    await Task.Delay(restTime, cancellationToken);
+                    log.WriteLine($"Rest time in interval on job start: {restTime.TotalMilliseconds}. Totalt time on last job was: {stopwatch.Elapsed.TotalMilliseconds}");
+                }
+                else
+                {
+                    log.WriteLine($"Last job took: {stopwatch.Elapsed.TotalMilliseconds}. No need to wait for new trigger.");
+
+                }
+            }
         }
     }
 }

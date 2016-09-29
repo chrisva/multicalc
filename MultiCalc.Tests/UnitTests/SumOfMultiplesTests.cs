@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace MultiCalc.Tests.UnitTests
 {
     [TestFixture]
-    public class SumOfMultiplesTest
+    public class SumOfMultiplesTests
     {
         [Test]
         public void Sum_to_1()

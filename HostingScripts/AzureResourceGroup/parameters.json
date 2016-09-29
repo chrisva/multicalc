@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "components_multicalc_name": {
+            "value": null
+        },
+        "components_multicalcweb_name": {
+            "value": null
+        },
+        "namespaces_multicalc_name": {
+            "value": null
+        },
+        "storageAccounts_function5adca5578b6c_name": {
+            "value": null
+        },
+        "storageAccounts_multicalc_name": {
+            "value": null
+        },
+        "sites_multicalcworker_name": {
+            "value": null
+        },
+        "sites_multicalcweb_name": {
+            "value": null
+        },
+        "AuthorizationRules_RootManageSharedAccessKey_name": {
+            "value": null
+        },
+        "queues_calculations_name": {
+            "value": null
+        },
+        "sites_multicalcworker_serverFarmId": {
+            "value": null
+        },
+        "sites_multicalcweb_serverFarmId": {
+            "value": null
+        }
+    }
+}

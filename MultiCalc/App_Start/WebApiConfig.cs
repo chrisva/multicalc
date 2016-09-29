@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
+using Autofac;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 
@@ -14,6 +16,8 @@ namespace MultiCalc
         {
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
+
+
 
             // Web API routes
             config.MapHttpAttributeRoutes();

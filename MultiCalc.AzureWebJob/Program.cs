@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
+﻿using Microsoft.Azure.WebJobs;
 
 namespace MultiCalc.AzureWebJob
 {
@@ -16,15 +10,16 @@ namespace MultiCalc.AzureWebJob
         static void Main()
         {
             JobHostConfiguration config = new JobHostConfiguration();
-            //FilesConfiguration filesConfig = new FilesConfiguration();
-            // When running locally, set this to a valid directory. 
-            // Remove this when running in Azure.
-            // filesConfig.RootPath = @"c:\temp\files";
 
             // Add Triggers and Binders for Files and Timer Trigger.
-            //config.UseFiles(filesConfig);
-            config.UseTimers();
-            JobHost host = new JobHost(config);
+            //config.UseTimers();
+
+
+
+            var host = new JobHost(config);
+
+            host.CallAsync(typeof(Functions).GetMethod("ProcessMethod"));
+
             host.RunAndBlock();
         }
     }
