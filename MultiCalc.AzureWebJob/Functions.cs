@@ -63,6 +63,7 @@ namespace MultiCalc.AzureWebJob
                         {
                             calcProcessMessage.SumOfMultiples = SumOfMultiples.To(calcProcessMessage.CalcModel.Factors, calcProcessMessage.CalcModel.ParticularNumberMax);
                             calcProcessMessage.Status = CalcStatus.Successfull;
+                            calcProcessMessage.StatusMessage = "Success";
                         }
                         catch (Exception ex)
                         {
