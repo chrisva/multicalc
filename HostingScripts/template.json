@@ -2,6 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "alertrules_proactive_diagnostics___multicalc_name": {
+            "defaultValue": "proactive diagnostics - multicalc",
+            "type": "String"
+        },
         "components_multicalc_name": {
             "defaultValue": "multicalc",
             "type": "String"
@@ -12,10 +16,6 @@
         },
         "namespaces_multicalc_name": {
             "defaultValue": "multicalc",
-            "type": "String"
-        },
-        "storageAccounts_function5adca5578b6c_name": {
-            "defaultValue": "function5adca5578b6c",
             "type": "String"
         },
         "storageAccounts_multicalc_name": {
@@ -49,6 +49,40 @@
     },
     "variables": {},
     "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/microsoft.insights/alertrules/proactive diagnostics - multicalc'.",
+            "type": "microsoft.insights/alertrules",
+            "name": "[parameters('alertrules_proactive_diagnostics___multicalc_name')]",
+            "apiVersion": "2014-04-01",
+            "location": "East US",
+            "tags": {
+                "hidden-link:/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourcegroups/multicalc/providers/microsoft.insights/components/multicalc": "Resource"
+            },
+            "properties": {
+                "name": "[parameters('alertrules_proactive_diagnostics___multicalc_name')]",
+                "description": "",
+                "isEnabled": true,
+                "condition": {
+                    "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+                    "dataSource": {
+                        "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+                        "resourceUri": "[resourceId('microsoft.insights/components', parameters('components_multicalc_name'))]",
+                        "metricName": "advanced::A3108E3D-5E26-44CF-B232-783F5E20EF10::ewAiAEgAeQBwAGUAcgBpAG8AbgBBAHAAcABsAGkAYwBhAHQAaQBvAG4AUwBpAGQAIgA6AG4AdQBsAGwALAAiAEgAeQBwAGUAcgBpAG8AbgBTAHUAYgBqAGUAYwB0AFMAaQBkACIAOgBuAHUAbABsACwAIgBIAHkAcABlAHIAaQBvAG4ATwBiAHMAZQByAHYAZQByAFMAaQBkACIAOgBuAHUAbABsACwAIgBDAHUAcwB0AG8AbQBlAHIAQQBjAGMAbwB1AG4AdABJAGQAIgA6ACIAMAAwADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAAMAAwADAAMAAwADAAIgAsACIAQQBwAHAAbABpAGMAYQB0AGkAbwBuAE4AYQBtAGUAIgA6AG4AdQBsAGwALAAiAEEAcABwAGwAaQBjAGEAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAFcAaQBuAGQAbwB3AFMAaQB6AGUASQBuAE0AaQBuAHUAdABlAHMAIgA6ADYAMAAsACIATQBlAHQAcgBpAGMATgBhAG0AZQAiADoAIgAiACwAIgBUAGgAcgBlAHMAaABvAGwAZAAiADoAMgAuADAALAAiAEEAbABlAHIAdABUAGUAbQBwAGwAYQB0AGUASQBkACIAOgAiACIALAAiAFIAdQBsAGUASQBkACIAOgAiACIALAAiAFIAdQBsAGUATgBhAG0AZQAiADoAIgAiACwAIgBSAHUAbABlAEQAZQBzAGMAcgBpAHAAdABpAG8AbgAiADoAIgAiACwAIgBSAGUAcwBvAHUAcgBjAGUASQBkACIAOgBuAHUAbABsACwAIgBTAHUAYgBzAGMAcgBpAHAAdABpAG8AbgBJAGQAIgA6AG4AdQBsAGwALAAiAEEAZwBnAHIAZQBnAGEAdABlAEYAdQBuAGMAdABpAG8AbgAiADoAIgAiACwAIgBDAG8AbQBwAGEAcgBpAHMAbwBuAE8AcABlAHIAYQB0AG8AcgAiADoAIgB7AFwAIgBCAGEAcwBlAGwAaQBuAGUAVABpAG0AZQBzAHAAYQBuAFwAIgA6AFwAIgAwADAAOgA0ADAAOgAwADAAXAAiACwAXAAiAEkAbgBzAGkAZwBoAHQAcwBTAGUAcgB2AGkAYwBlAEwAYQBnAFwAIgA6AFwAIgAwADAAOgAwADAAOgAwADAAXAAiACwAXAAiAEIAdQBmAGYAZQByAFQAaQBtAGUAXAAiADoAXAAiADAAMAA6ADAAMQA6ADAAMABcACIALABcACIAQgBsAG8AYgBTAHQAbwByAGEAZwBlAEwAbwBnAGcAaQBuAGcARQBuAGEAYgBsAGUAZABcACIAOgBmAGEAbABzAGUALABcACIAVQBzAGUAcgBTAHUAcABwAHIAZQBzAHMAaQBvAG4AcwBcACIAOgBuAHUAbABsACwAXAAiAFAAcgBvAGYAaQBsAGUASQBkAFwAIgA6ADQAMAAwADcAOQAzADEALABcACIARQBtAGEAaQBsAFQAeQBwAGUAXAAiADoAMAAsAFwAIgBSAGEAdwBQAHIAbwBhAGMAdABpAHYAZQBSAHUAbABlAEMAbwBuAGYAaQBnAFwAIgA6AG4AdQBsAGwAfQAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8AQwB1AHMAdABvAG0AIgA6AGYAYQBsAHMAZQAsACIAQwB1AHMAdABvAG0ARQBtAGEAaQBsAHMARQBuAGMAbwBkAGUAZAAiADoAIgAiACwAIgBFAG4AYQBiAGwAZQBTAGUAbgBkAEUAbQBhAGkAbABUAG8ATwB3AG4AZQByAHMAIgA6AGYAYQBsAHMAZQB9AA=="
+                    },
+                    "threshold": 2,
+                    "windowSize": "PT1H"
+                },
+                "action": {
+                    "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+                    "sendToServiceOwners": true,
+                    "customEmails": []
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('microsoft.insights/components', parameters('components_multicalc_name'))]"
+            ]
+        },
         {
             "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/microsoft.insights/components/multicalc'.",
             "type": "microsoft.insights/components",
@@ -99,22 +133,6 @@
                 "enabled": true,
                 "updatedAt": "2016-09-23T13:43:47.857Z"
             },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/a0cf0bf6-7c98-41df-9713-2d539b282d51/resourceGroups/multicalc/providers/Microsoft.Storage/storageAccounts/function5adca5578b6c'.",
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "Storage",
-            "name": "[parameters('storageAccounts_function5adca5578b6c_name')]",
-            "apiVersion": "2016-01-01",
-            "location": "westeurope",
-            "tags": {},
-            "properties": {},
             "resources": [],
             "dependsOn": []
         },
@@ -242,11 +260,11 @@
                 "status": "Active",
                 "createdAt": "2016-09-23T14:44:44.2465597Z",
                 "updatedAt": "2016-09-23T14:44:46.27Z",
-                "accessedAt": "2016-09-29T00:48:34.3026608Z",
+                "accessedAt": "2016-09-29T14:28:08.4514046Z",
                 "supportOrdering": false,
                 "countDetails": {
                     "activeMessageCount": 0,
-                    "deadLetterMessageCount": 7,
+                    "deadLetterMessageCount": 12,
                     "scheduledMessageCount": 0,
                     "transferMessageCount": 0,
                     "transferDeadLetterMessageCount": 0

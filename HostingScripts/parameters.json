@@ -2,6 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "alertrules_proactive_diagnostics___multicalc_name": {
+            "value": null
+        },
         "components_multicalc_name": {
             "value": null
         },
@@ -9,9 +12,6 @@
             "value": null
         },
         "namespaces_multicalc_name": {
-            "value": null
-        },
-        "storageAccounts_function5adca5578b6c_name": {
             "value": null
         },
         "storageAccounts_multicalc_name": {
