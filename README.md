@@ -77,7 +77,7 @@ This is a prototype / proof of concept and is not perfect.  So the solution does
 - Basic unit tests on functions.
 
 
-### What is not there and could be different:
+### What is not there and could be different, but is not because of time:
 - No React or Angular but should be in next version
 - No general logging strategy - should use Serilog with sinks to a log hub such as ElasticSearch / Kibana, Seq ++
 - Dependency injection should be implemented everywhere
@@ -85,8 +85,13 @@ This is a prototype / proof of concept and is not perfect.  So the solution does
 - More code comments throughout the solution
 - Better docs
 - A good authentication solution to sync sessions and handle access rights
+- Continues deployment and build
 - ++
 
+
+## Files in the repository
+In the repository there is the **MultiCalc.sln** that is the starting point for working with the solution in Visual Studio 2015 and above. 
+In addition there is a folder called **HostingScripts** that holds scripts to recreate the resource group or use as a template for it from CLI or other code.
 
 ## Some screenshots from Azure portal:
 
