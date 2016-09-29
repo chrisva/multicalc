@@ -95,3 +95,17 @@ In addition there is a folder called **HostingScripts** that holds scripts to re
 
 ## Some screenshots from Azure portal:
 
+![](https://github.com/chrisva/multicalc/blob/master/GuideImages/MultiCalcScreen2.png)
+Results from sending a few calculations.
+
+![](https://github.com/chrisva/multicalc/blob/master/GuideImages/WebDash.png)
+Dashboard on web app in Azure.
+
+![](https://github.com/chrisva/multicalc/blob/master/GuideImages/WebJobsStarts.png)
+Dashboard on WebJobs in Azure.
+
+![](https://github.com/chrisva/multicalc/blob/master/GuideImages/Invocation.png)
+Dashboard on invocations in WebJobs in Azure.
+
+
+
