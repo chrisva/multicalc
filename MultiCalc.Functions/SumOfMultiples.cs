@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MultiCalc.Functions
@@ -18,6 +19,9 @@ namespace MultiCalc.Functions
         /// <returns></returns>
         public static float To(int[] factors, long particularNumberMax)
         {
+            if (particularNumberMax > 100000000)
+                throw new ArgumentException("The ParticularNumberMax cannot be over 100000000. The solution is not scaled for that calculation. Contact support and order a dedicated machine for your calculations.");
+
             long sum = 0;
 
             for (long i = 0; i < particularNumberMax; i++)

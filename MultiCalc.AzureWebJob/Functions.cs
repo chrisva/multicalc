@@ -46,7 +46,8 @@ namespace MultiCalc.AzureWebJob
                 try
                 {
                     message = await _azureServiceBusQueueService.RecieveNextMessageAsync();
-                    var calcProcessMessage = JsonConvert.DeserializeObject<CalculateProcessMessage>(message.GetBody<string>());
+                    var calcProcessMessage =
+                        JsonConvert.DeserializeObject<CalculateProcessMessage>(message.GetBody<string>());
 
                     if (calcProcessMessage == null)
                     {
@@ -54,12 +55,21 @@ namespace MultiCalc.AzureWebJob
                     }
                     else
                     {
-                        log.WriteLine($"Message: { JsonConvert.SerializeObject(calcProcessMessage)}");
+                        log.WriteLine($"Message: {JsonConvert.SerializeObject(calcProcessMessage)}");
                         calcProcessMessage.Status = CalcStatus.Processing;
 
                         //Doing the actual calculation
-                        calcProcessMessage.SumOfMultiples = SumOfMultiples.To(calcProcessMessage.CalcModel.Factors, calcProcessMessage.CalcModel.ParticularNumberMax);
-                        calcProcessMessage.Status = CalcStatus.Successfull;
+                        try
+                        {
+                            calcProcessMessage.SumOfMultiples = SumOfMultiples.To(calcProcessMessage.CalcModel.Factors, calcProcessMessage.CalcModel.ParticularNumberMax);
+                            calcProcessMessage.Status = CalcStatus.Successfull;
+                        }
+                        catch (Exception ex)
+                        {
+                            calcProcessMessage.Status = CalcStatus.Error;
+                            calcProcessMessage.StatusMessage = $"Something went wrong with calculation. Error: {ex.Message}";
+                            log.Write($"Message could not be calculated. Removing from queue and return error. Error: {ex.Message}");
+                        }
 
                         try
                         {
