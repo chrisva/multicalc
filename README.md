@@ -3,8 +3,8 @@ Application that can be given a number and can find the sum of particular multip
 
 ### Running web solution:
 
-- [MultiCalc web](http://www.google.com)
-- [MultiCalc Swagger Rest API docs](http://www.google.com)
+- [MultiCalc web](https://multicalcweb.azurewebsites.net/)
+- [MultiCalc Swagger Rest API docs](https://multicalcweb.azurewebsites.net/swagger)
 
 ## How to use the application:
 
